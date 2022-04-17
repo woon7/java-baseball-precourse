@@ -6,33 +6,27 @@ public class Score {
 
     private int ball;
 
-    public int getStrike() {
-        return strike;
+    public void addStrike() {
+        this.strike++;
     }
 
-    public void setStrike(int strike) {
-        this.strike = strike;
-    }
-
-    public int getBall() {
-        return ball;
-    }
-
-    public void setBall(int ball) {
-        this.ball = ball;
+    public void addBall() {
+        this.ball++;
     }
 
     public boolean is3Strike() {
-        return strike == 3;
+        return this.strike == 3;
     }
 
     @Override
     public String toString() {
         String result = "낫싱";
-        if (ball > 0)
-            result = ball + "볼 ";
-        if (strike > 0)
-            result = result + strike + "스트라이크";
+        if (this.ball > 0) {
+            result = this.ball + "볼 ";
+        }
+        if (this.strike > 0) {
+            result = result + this.strike + "스트라이크";
+        }
         return result;
     }
 }

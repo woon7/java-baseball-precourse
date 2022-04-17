@@ -1,5 +1,6 @@
 package baseball.view.impl;
 
+import baseball.dto.Score;
 import baseball.view.BaseballView;
 import camp.nextstep.edu.missionutils.Console;
 
@@ -11,13 +12,15 @@ public class BaseballViewImpl implements BaseballView {
     }
 
     @Override
-    public String stopGame() {
-        return "3개의 숫자를 모두 맞히셨습니다! 게임 종료";
+    public void exit() {
+        System.out.println("프로그램을 종료합니다.");
     }
 
     @Override
-    public String exit() {
-        return "프로그램을 종료합니다.";
+    public void printScore(Score score) {
+        System.out.println(score.toString());
+        if (score.is3Strike())
+            System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
     }
 
     @Override

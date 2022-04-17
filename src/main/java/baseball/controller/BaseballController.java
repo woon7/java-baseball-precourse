@@ -28,10 +28,8 @@ public class BaseballController {
 
     public void startGame(String digits) {
         baseballService.checkDigits(digits); // 예외처리
-        Score score = new Score();
-        // TODO : 계산 로직
-        if (score.is3Strike())
-            baseballView.stopGame();
+        Score score = baseballService.compareDigits(digits);
+        baseballView.printScore(score);
     }
 
 }
