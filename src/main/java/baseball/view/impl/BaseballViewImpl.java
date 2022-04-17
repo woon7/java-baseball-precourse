@@ -27,7 +27,7 @@ public class BaseballViewImpl implements BaseballView {
     public String inputMode() {
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
         String mode = Console.readLine();
-        if (mode.equals("1") || mode.equals("2")) {
+        if (!(mode.equals("1") || mode.equals("2"))) {
             throw new IllegalArgumentException("1 또는 2를 입력해야 합니다.");
         }
         return mode;
