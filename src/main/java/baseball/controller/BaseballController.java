@@ -16,20 +16,31 @@ public class BaseballController {
     }
 
     public void run() {
-        String mode;
+        String mode = "1";
         do {
-            startGame(baseballView.input3Digit());
-            mode = baseballView.inputMode();
-        } while (mode.equals("1"));
-        if (mode.equals("2")) {
-            baseballView.exit();
-        }
+            String digits = baseballView.input3Digit();
+            prepareGame(mode, digits);
+            Score score = startGame(digits);
+            baseballView.printScore(score);
+            mode = stopGame(score);
+        } while (mode == null || mode.equals("1"));
+        baseballView.exit();
     }
 
-    public void startGame(String digits) {
+    private void prepareGame(String mode, String digits) {
         baseballService.checkDigits(digits); // 예외처리
-        Score score = baseballService.compareDigits(digits);
-        baseballView.printScore(score);
+        if (mode != null && mode.equals("1"))
+            baseballService.setRandomDigits();
+    }
+
+    private Score startGame(String digits) {
+        return baseballService.compareDigits(digits);
+    }
+
+    private String stopGame(Score score) {
+        if (score.is3Strike())
+            return baseballView.inputMode();
+        return null;
     }
 
 }

@@ -8,6 +8,17 @@ import java.util.Set;
 
 public class BaseballServiceImpl implements BaseballService {
 
+    private String randomDigits;
+
+    @Override
+    public void setRandomDigits() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            builder.append(Randoms.pickNumberInRange(1, 9));
+        }
+        this.randomDigits = builder.toString();
+    }
+
     private void checkDigit(char c) {
         if (!Character.isDigit(c)) {
             throw new IllegalArgumentException("숫자가 아닌 문자가 포함되어 있습니다.");
@@ -46,21 +57,36 @@ public class BaseballServiceImpl implements BaseballService {
     @Override
     public Score compareDigits(String digits) {
         Score score = new Score();
-        String randomDigits = get3RandomDigits();
-        findStrike(digits, randomDigits);
+        findStrike(score, digits);
+        findBall(score, digits);
         return score;
     }
 
-    private int findStrike(String digits, String randomDigits) {
-        // TODO : 비교
-        return 0;
+    private void findStrike(Score score, String digits) {
+        addStrike(score, digits, 0, 0);
+        addStrike(score, digits, 1, 1);
+        addStrike(score, digits, 2, 2);
     }
 
-    private String get3RandomDigits() {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < 3; i++) {
-            result.append(Randoms.pickNumberInRange(1, 9));
+    private void addStrike(Score score, String digits, int digitsIndex, int randomDigitsIndex) {
+        if (digits.charAt(digitsIndex) == this.randomDigits.charAt(randomDigitsIndex)) {
+            score.addStrike();
         }
-        return result.toString();
     }
+
+    private void findBall(Score score, String digits) {
+        addBall(score, digits, 0, 1);
+        addBall(score, digits, 0, 2);
+        addBall(score, digits, 1, 0);
+        addBall(score, digits, 1, 2);
+        addBall(score, digits, 2, 0);
+        addBall(score, digits, 2, 1);
+    }
+
+    private void addBall(Score score, String digits, int digitsIndex, int randomDigitsIndex) {
+        if (digits.charAt(digitsIndex) == this.randomDigits.charAt(randomDigitsIndex)) {
+            score.addBall();
+        }
+    }
+
 }
