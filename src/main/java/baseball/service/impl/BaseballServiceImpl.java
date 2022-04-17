@@ -29,8 +29,8 @@ public class BaseballServiceImpl implements BaseballService {
     }
 
     private void addSetAndCheckDuplicate(Set set, char c) {
-        if (set.add(c)) {
-            throw new IllegalArgumentException("");
+        if (!set.add(c)) {
+            throw new IllegalArgumentException("서로 다른 숫자만 입력할 수 있습니다.");
         }
     }
 
