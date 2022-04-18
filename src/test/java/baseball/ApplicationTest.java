@@ -22,13 +22,31 @@ class ApplicationTest extends NsTest {
 
     @Test
     void 예외_테스트() {
+        // 입력값이 3자리가 넘어가는 경우
         assertSimpleTest(() ->
                 assertThatThrownBy(() -> runException("1234"))
                         .isInstanceOf(IllegalArgumentException.class)
         );
+        // 입력값에 공백이 있는 경우
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("  3"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+        // 입력값에 문자가 들어가는 경우
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("1R1"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+        // 입력값이 서로 다른 숫자가 아닌 경우
         assertSimpleTest(() ->
                 assertThatThrownBy(() -> runException("111"))
                         .isInstanceOf(IllegalArgumentException.class)
+        );
+        // 랜덤값이 서로 다른 숫자가 아닌 경우
+        assertRandomNumberInRangeTest(
+                () -> assertThatThrownBy(() -> runException("246", "135", "1", "597", "589", "2"))
+                        .isInstanceOf(IllegalArgumentException.class),
+                1, 3, 5, 5, 5, 5
         );
     }
 

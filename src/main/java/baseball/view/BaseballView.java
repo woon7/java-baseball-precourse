@@ -1,11 +1,12 @@
 package baseball.view;
 
 import baseball.dto.Score;
+import baseball.enums.GameMode;
 
 public interface BaseballView {
     String input3Digit();
 
-    String inputMode();
+    GameMode inputMode();
 
     void exit();
 

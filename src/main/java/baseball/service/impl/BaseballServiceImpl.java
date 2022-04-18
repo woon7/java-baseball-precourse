@@ -8,7 +8,17 @@ import java.util.Set;
 
 public class BaseballServiceImpl implements BaseballService {
 
+    private Score score;
+
+    private String digits;
+
     private String randomDigits;
+
+    @Override
+    public void setDigits(String digits) {
+        checkDigits(digits); // 예외처리
+        this.digits = digits;
+    }
 
     @Override
     public void setRandomDigits() {
@@ -17,6 +27,7 @@ public class BaseballServiceImpl implements BaseballService {
             builder.append(Randoms.pickNumberInRange(1, 9));
         }
         this.randomDigits = builder.toString();
+        checkDuplicateDigits(this.randomDigits);
     }
 
     private void checkDigit(char c) {
@@ -45,8 +56,7 @@ public class BaseballServiceImpl implements BaseballService {
         }
     }
 
-    @Override
-    public void checkDigits(String digits) {
+    private void checkDigits(String digits) {
         checkArgLength(digits);
         for (int i = 0; i < digits.length(); i++) {
             checkDigit(digits.charAt(i));
@@ -55,37 +65,39 @@ public class BaseballServiceImpl implements BaseballService {
     }
 
     @Override
-    public Score compareDigits(String digits) {
-        Score score = new Score();
-        findStrike(score, digits);
-        findBall(score, digits);
-        return score;
+    public Score compareDigits() {
+        this.score = new Score();
+        findStrike();
+        findBall();
+        return this.score;
     }
 
-    private void findStrike(Score score, String digits) {
-        addStrike(score, digits, 0, 0);
-        addStrike(score, digits, 1, 1);
-        addStrike(score, digits, 2, 2);
+    private boolean isSameDigit(int digitsIndex, int randomDigitsIndex) {
+        return this.digits.charAt(digitsIndex) == this.randomDigits.charAt(randomDigitsIndex);
     }
 
-    private void addStrike(Score score, String digits, int digitsIndex, int randomDigitsIndex) {
-        if (digits.charAt(digitsIndex) == this.randomDigits.charAt(randomDigitsIndex)) {
-            score.addStrike();
+    private void findStrike() {
+        for (int i = 0; i < 3; i++) {
+            addStrike(i, i);
         }
     }
 
-    private void findBall(Score score, String digits) {
-        addBall(score, digits, 0, 1);
-        addBall(score, digits, 0, 2);
-        addBall(score, digits, 1, 0);
-        addBall(score, digits, 1, 2);
-        addBall(score, digits, 2, 0);
-        addBall(score, digits, 2, 1);
+    private void addStrike(int digitsIndex, int randomDigitsIndex) {
+        if (isSameDigit(digitsIndex, randomDigitsIndex)) {
+            this.score.addStrike();
+        }
     }
 
-    private void addBall(Score score, String digits, int digitsIndex, int randomDigitsIndex) {
-        if (digits.charAt(digitsIndex) == this.randomDigits.charAt(randomDigitsIndex)) {
-            score.addBall();
+    private void findBall() {
+        for (int i = 0; i < 3; i++) {
+            addBall(i, (i + 1) % 3); // 0 1, 1 2, 2 0
+            addBall(i, (i + 2) % 3); // 0 2, 1 0, 2 1
+        }
+    }
+
+    private void addBall(int digitsIndex, int randomDigitsIndex) {
+        if (isSameDigit(digitsIndex, randomDigitsIndex)) {
+            this.score.addBall();
         }
     }
 

@@ -1,6 +1,7 @@
 package baseball.controller;
 
 import baseball.dto.Score;
+import baseball.enums.GameMode;
 import baseball.service.BaseballService;
 import baseball.view.BaseballView;
 
@@ -16,31 +17,35 @@ public class BaseballController {
     }
 
     public void run() {
-        String mode = "1";
+        GameMode mode = GameMode.NEW_GAME;
         do {
-            String digits = baseballView.input3Digit();
-            prepareGame(mode, digits);
-            Score score = startGame(digits);
-            baseballView.printScore(score);
-            mode = stopGame(score);
-        } while (mode == null || mode.equals("1"));
+            prepareGame(mode);
+            mode = stopGame(startGame());
+        } while (mode == GameMode.RETRY || mode == GameMode.NEW_GAME);
+        exit();
+    }
+
+    private void exit() {
         baseballView.exit();
     }
 
-    private void prepareGame(String mode, String digits) {
-        baseballService.checkDigits(digits); // 예외처리
-        if (mode != null && mode.equals("1"))
+    private void prepareGame(GameMode mode) {
+        baseballService.setDigits(baseballView.input3Digit());
+        if (mode == GameMode.NEW_GAME) {
             baseballService.setRandomDigits();
+        }
     }
 
-    private Score startGame(String digits) {
-        return baseballService.compareDigits(digits);
+    private Score startGame() {
+        return baseballService.compareDigits();
     }
 
-    private String stopGame(Score score) {
-        if (score.is3Strike())
+    private GameMode stopGame(Score score) {
+        baseballView.printScore(score);
+        if (score.is3Strike()) {
             return baseballView.inputMode();
-        return null;
+        }
+        return GameMode.RETRY;
     }
 
 }
