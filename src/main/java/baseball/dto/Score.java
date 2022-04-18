@@ -27,6 +27,6 @@ public class Score {
         if (this.strike > 0) {
             result = result + this.strike + "스트라이크";
         }
-        return result;
+        return result.trim();
     }
 }

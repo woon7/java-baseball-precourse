@@ -20,6 +20,13 @@ public class BaseballServiceImpl implements BaseballService {
         this.digits = digits;
     }
 
+    // 테스트를 위한 setter
+    @Override
+    public void setRandomDigits(String randomDigits) {
+        checkDuplicateDigits(randomDigits);
+        this.randomDigits = randomDigits;
+    }
+
     @Override
     public void setRandomDigits() {
         StringBuilder builder = new StringBuilder();

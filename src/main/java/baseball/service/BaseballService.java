@@ -6,6 +6,8 @@ public interface BaseballService {
 
     void setRandomDigits();
 
+    void setRandomDigits(String randomDigits);
+
     Score compareDigits();
 
     void setDigits(String digits);
